@@ -27,4 +27,10 @@ set(Resourceful_VERSION_PATCH 0)
 #
 add_subdirectory(Source)
 
+#-----------------------------------------------------------------------
+# Add testing with dashboard submission
+#
+enable_testing()
+include(CTest)
+add_subdirectory(Tests)
 
