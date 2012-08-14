@@ -12,7 +12,13 @@
 # See the License for more information.
 #-----------------------------------------------------------------------
 
-add_executable(Resourceful Resourceful.cpp)
+set(RESOURCEFUL_SOURCES
+  Resourceful.cpp
+  resourceful_binreloc.h
+  resourceful_binreloc.c
+  )
 
+add_definitions(-DENABLE_BINRELOC)
+add_executable(Resourceful ${RESOURCEFUL_SOURCES})
 install(TARGETS Resourceful DESTINATION bin)
 
