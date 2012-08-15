@@ -14,4 +14,8 @@ being PYTHONPATH).
 example being Qt's QResource).
 
 
+Executable Self Location
+------------------------
+On Unices, the binreloc code used in the [Listaller](http://listaller.tenstral.net/index.html) project provides an API for determining the location 
+of an executable (program or shared library) on the filesystem.
 
