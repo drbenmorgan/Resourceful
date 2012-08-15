@@ -16,12 +16,17 @@ example being Qt's QResource).
 
 Executable Self Location
 ------------------------
+Resources are connected with an application and/or library, so a key issue
+for avoiding hard coded paths is for these executables to be able to
+locate themselves on the filesystem. If this path can be retrieved, then
+we can locate resources if they are arranged in a directory structure
+that can be located relative to it.
+
 On Unices, the binreloc code used in the [Listaller](http://listaller.tenstral.net/index.html) project provides an API for retrieving the location 
 of an executable (program or shared library) on the filesystem.
 Mac OS X is Unix based, with binreloc using the [\_NSGetExecutablePath](https://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man3/dyld.3.html) function to locate executables, but we should also note 
-the API provided by [Cocoa and Core Foundation](https://developer.apple.com/library/mac/#documentation/CoreFoundation/Conceptual/CFBundles/Introduction/Introduction.html) for application and resource location. The [Qt for Mac OS X](http://qt-project.org/doc/qt-4.8/mac-differences.html) also has some
-useful information here.
-
+the API provided by [Cocoa and Core Foundation](https://developer.apple.com/library/mac/#documentation/CoreFoundation/Conceptual/CFBundles/Introduction/Introduction.html) for application and resource location. The [Qt for Mac OS X](http://qt-project.org/doc/qt-4.8/mac-differences.html) guide also has 
+some useful information here.
 
 On Win32, it looks like the [GetModuleFileName](http://msdn.microsoft.com/en-us/library/windows/desktop/ms683197%28v=vs.85%29.aspx) function can be 
 used to determine the full path to the file containing a given module.
