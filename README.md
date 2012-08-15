@@ -13,6 +13,10 @@ being PYTHONPATH).
 * Resource formats, from plain text to compiled binary formats (one 
 example being Qt's QResource).
 
+One clear use case which we may test is i18n, and specifically
+translation. Here, we have resource files (e.g. [gettext](http://www.gnu.org/software/gettext/) MO files)
+for each supported language, which are clearly tied to the executable.
+
 
 Executable Self Location
 ------------------------
