@@ -14,36 +14,51 @@
 
 // Standard Library
 #include <iostream>
+#include <fstream>
 
 // Third Party
 // - A
 
 // This Project
-#include "resourceful_binreloc.h"
+#include "RFLResource.h"
 
 int main() {
   std::cout << "[Resourceful::Info] Startup!" << std::endl;
+  std::cout << "[Resourceful::Info] initResource()" << std::endl;
+  if (!RFLResource::initResources()) {
+    std::cerr << "[Resourceful::Error] Could not initialize resources" << std::endl;
+    return 1;
+  }
 
-  // - Try use of binreloc directly....
-  // Initialization
-  BrInitError err;
-  if (!br_init(&err)) {
-    std::cerr << "[Resourceful::Error] Failed to locate self (" 
-              << err
-              << ")" << std::endl;
-   return 1;
-  } 
+  // - Log the application path
+  std::string appPath = RFLResource::getApplicationPath();
+  std::cout << "[Resourceful::Info] getApplicationPath() = " 
+            << RFLResource::getApplicationPath()
+            << std::endl;
 
-  // Basic exe paths (remember to free!)
-  char* exe_path(0);
-  exe_path = br_find_exe("");
-  std::cout << "[Resourceful::Info] Located self at " << exe_path << std::endl;
-  free(exe_path);
-
-  char* exe_dir(0);
-  exe_dir = br_find_exe_dir("");
-  std::cout << "[Resourceful::Info] Self in directory " << exe_dir << std::endl;
-  free(exe_dir);
+  // - Log the resource path
+  std::cout << "[Resourceful::Info] getResourcePath(foo) = "
+            << RFLResource::getResourcePath("startupScript")
+            << std::endl;
+  
+  std::string reqResourceFile = RFLResource::getResourcePath("startupScript");
+  if (reqResourceFile.empty()) {
+    std::cerr << "[Resourceful::error] Invalid resource" << std::endl;
+    return 1;
+  }
+  
+  std::ifstream startupScriptStream;
+  startupScriptStream.open(reqResourceFile.c_str());
+  if(!startupScriptStream) {
+    std::cerr << "[Resourceful::error] Failed to open resource" << std::endl;
+    return 1;
+  } else {
+    std::cout << "[Resourceful::info] Opened resource" << std::endl;
+    std::string sLine;
+    while (std::getline(startupScriptStream,sLine)) {
+      std::cout << sLine << std::endl;
+    }
+  }
 
   return 0;
 }

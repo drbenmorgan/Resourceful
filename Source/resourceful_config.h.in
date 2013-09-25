@@ -1,0 +1,28 @@
+// resourceful_config.h - resourcefule core configuration
+//
+// Copyright (c) 2013 by Ben Morgan <bmorgan.warwick@gmail.com> 
+// Copyright (c) 2013 by The University of Warwick
+//
+// Distributed under the OSI-approved BSD 3-Clause License (the "License");
+// see accompanying file License.txt for details.
+//
+// This software is distributed WITHOUT ANY WARRANTY; without even the
+// implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the License for more information.
+
+#ifndef RESOURCEFUL_CONFIG_HH
+#define RESOURCEFUL_CONFIG_HH
+// Standard Library
+#include <string>
+
+// Third Party
+// - Boost, or not
+#cmakedefine Boost_FOUND
+
+// This Project
+std::string getAppToResourcePath() {
+  return "@RESOURCEFUL_RESOURCEPATH@";
+}
+
+#endif // RESOURCEFUL_CONFIG.H_HH
+

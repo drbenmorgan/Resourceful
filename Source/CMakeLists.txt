@@ -12,13 +12,36 @@
 # See the License for more information.
 #-----------------------------------------------------------------------
 
+#-----------------------------------------------------------------------
+# Boost usage - filesystem used to canonize paths, but this is
+# for pure cozmetix. Its usage is private so can be swapped out
+#
+find_package(Boost 1.43 REQUIRED filesystem system)
+
+add_definitions(-DENABLE_BINRELOC)
+
+if(APPLE AND UNIX)
+  set(RESOURCEFUL_RESOURCEPATH "../Resources")
+endif()
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
+
+configure_file(resourceful_config.h.in resourceful_config.h @ONLY)
 set(RESOURCEFUL_SOURCES
   Resourceful.cpp
   resourceful_binreloc.h
   resourceful_binreloc.c
+  resourceful_config.h
+  RFLResource.h
+  RFLResource.cc
   )
 
-add_definitions(-DENABLE_BINRELOC)
-add_executable(Resourceful ${RESOURCEFUL_SOURCES})
+set(RESOURCEFUL_RESOURCES startupScript)
+
+add_executable(Resourceful MACOSX_BUNDLE ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
+target_link_libraries(Resourceful ${Boost_LIBRARIES})
+set_target_properties(Resourceful PROPERTIES RESOURCE ${RESOURCEFUL_RESOURCES})
+
 install(TARGETS Resourceful DESTINATION bin)
 
