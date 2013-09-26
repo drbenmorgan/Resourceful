@@ -15,12 +15,19 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(Resourceful)
 
 #----------------------------------------------------------------------
-# Define the project version
+# Define the project configuration
 #
+# - Versioning
 set(Resourceful_VERSION_MAJOR 0)
 set(Resourceful_VERSION_MINOR 1)
 set(Resourceful_VERSION_PATCH 0)
 
+# - Build as .app on Mac, standard tool on other platforms
+if(APPLE AND UNIX)
+  set(RESOURCEFUL_RESOURCEPATH "../Resources")
+else()
+  file(RELATIVE_PATH RESOURCEFUL_RESOURCEPATH "${CMAKE_INSTALL_FULL_BINDIR}" "${CMAKE_INSTALL_FULL_RESOURCEDIR}")
+endif()
 
 #----------------------------------------------------------------------
 # Build subdirectories

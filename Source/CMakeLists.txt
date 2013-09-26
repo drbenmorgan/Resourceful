@@ -15,18 +15,18 @@
 #-----------------------------------------------------------------------
 # Boost usage - filesystem used to canonize paths, but this is
 # for pure cozmetix. Its usage is private so can be swapped out
+# if you want to use other methods for paths or just don't care
 #
 find_package(Boost 1.43 REQUIRED filesystem system)
 
 add_definitions(-DENABLE_BINRELOC)
 
-if(APPLE AND UNIX)
-  set(RESOURCEFUL_RESOURCEPATH "../Resources")
-endif()
-
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${Boost_INCLUDE_DIRS})
 
+#-----------------------------------------------------------------------
+# Define Sources/Resources
+#
 configure_file(resourceful_config.h.in resourceful_config.h @ONLY)
 set(RESOURCEFUL_SOURCES
   Resourceful.cpp
@@ -36,12 +36,21 @@ set(RESOURCEFUL_SOURCES
   RFLResource.h
   RFLResource.cc
   )
-
 set(RESOURCEFUL_RESOURCES startupScript)
 
-add_executable(Resourceful MACOSX_BUNDLE ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
-target_link_libraries(Resourceful ${Boost_LIBRARIES})
-set_target_properties(Resourceful PROPERTIES RESOURCE ${RESOURCEFUL_RESOURCES})
+set_property(SOURCE ${RESOURCEFUL_RESOURCES} 
+  PROPERTY 
+    MACOSX_PACKAGE_LOCATION Resources
+  )
 
-install(TARGETS Resourceful DESTINATION bin)
+#-----------------------------------------------------------------------
+# Target
+#
+add_executable(Resourceful MACOSX_BUNDLE ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
+
+set_target_properties(Resourceful 
+  PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/BuildProducts
+  )
+target_link_libraries(Resourceful ${Boost_LIBRARIES})
 
