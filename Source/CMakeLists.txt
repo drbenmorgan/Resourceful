@@ -40,17 +40,12 @@ set(RESOURCEFUL_RESOURCES startupScript)
 
 set_property(SOURCE ${RESOURCEFUL_RESOURCES} 
   PROPERTY 
-    MACOSX_PACKAGE_LOCATION Resources
+    MACOSX_PACKAGE_LOCATION "${RESOURCEFUL_PACKAGE_LOCATION}"
   )
 
 #-----------------------------------------------------------------------
 # Target
 #
 add_executable(Resourceful MACOSX_BUNDLE ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
-
-set_target_properties(Resourceful 
-  PROPERTIES 
-    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/BuildProducts
-  )
 target_link_libraries(Resourceful ${Boost_LIBRARIES})
 
