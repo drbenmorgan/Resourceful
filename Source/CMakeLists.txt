@@ -13,6 +13,10 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
+# "Dumb" executable
+add_executable(ResourcefulBasic ResourcefulBasic.cpp)
+
+#-----------------------------------------------------------------------
 # Boost usage - filesystem used to canonize paths, but this is
 # for pure cozmetix. Its usage is private so can be swapped out
 # if you want to use other methods for paths or just don't care
@@ -38,8 +42,8 @@ set(RESOURCEFUL_SOURCES
   )
 set(RESOURCEFUL_RESOURCES startupScript)
 
-set_property(SOURCE ${RESOURCEFUL_RESOURCES} 
-  PROPERTY 
+set_property(SOURCE ${RESOURCEFUL_RESOURCES}
+  PROPERTY
     MACOSX_PACKAGE_LOCATION "${RESOURCEFUL_PACKAGE_LOCATION}"
   )
 
