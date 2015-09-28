@@ -32,21 +32,23 @@ int main() {
 
   // - Log the application path
   std::string appPath = RFLResource::getApplicationPath();
-  std::cout << "[Resourceful::Info] getApplicationPath() = " 
+  std::cout << "[Resourceful::Info] getApplicationPath() = "
             << RFLResource::getApplicationPath()
             << std::endl;
 
+  // - Add an extra search path
+  //RFLResource::prependToResourcePath("/tmp");
   // - Log the resource path
-  std::cout << "[Resourceful::Info] getResourcePath(foo) = "
+  std::cout << "[Resourceful::Info] getResourcePath(startupScript) = "
             << RFLResource::getResourcePath("startupScript")
             << std::endl;
-  
+
   std::string reqResourceFile = RFLResource::getResourcePath("startupScript");
   if (reqResourceFile.empty()) {
     std::cerr << "[Resourceful::error] Invalid resource" << std::endl;
     return 1;
   }
-  
+
   std::ifstream startupScriptStream;
   startupScriptStream.open(reqResourceFile.c_str());
   if(!startupScriptStream) {

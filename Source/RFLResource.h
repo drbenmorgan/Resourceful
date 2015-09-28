@@ -1,6 +1,6 @@
 // RFLResource.h - Resourceful interface for accessing app resources
 //
-// Copyright (c) 2013 by Ben Morgan <bmorgan.warwick@gmail.com> 
+// Copyright (c) 2013 by Ben Morgan <bmorgan.warwick@gmail.com>
 // Copyright (c) 2013 by The University of Warwick
 //
 // Distributed under the OSI-approved BSD 3-Clause License (the "License");
@@ -28,6 +28,10 @@ std::string getApplicationPath();
 
 //! Return path to named resource
 std::string getResourcePath(const std::string& internalPath);
+
+//! Prepend path to search path for resources
+void prependToResourcePath(const std::string& searchPath);
+
 }
 #endif // RFLRESOURCE_HH
 

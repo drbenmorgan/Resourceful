@@ -11,7 +11,7 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the License for more information.
 #-----------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 project(Resourceful)
 
 #----------------------------------------------------------------------
@@ -21,6 +21,12 @@ project(Resourceful)
 set(Resourceful_VERSION_MAJOR 0)
 set(Resourceful_VERSION_MINOR 1)
 set(Resourceful_VERSION_PATCH 0)
+
+# Force C++11 without checks
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 # - Build as .app on Mac, standard tool on other platforms
 # Trick here is that we want to recreate the relative path arrangement
@@ -42,7 +48,7 @@ else()
   else()
     set(CMAKE_INSTALL_FULL_RESOURCEDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_RESOURCEDIR}")
   endif()
- 
+
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/BuildProducts/${CMAKE_INSTALL_BINDIR}")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/BuildProducts/${CMAKE_INSTALL_LIBDIR}")
 
