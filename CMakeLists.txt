@@ -29,7 +29,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # There are different hierarchies for .app bundles and a "unix tool"
 # but see how CMake is bundled for a counter example of using a
 # Unix layout inside a .app - that may be the most portable way
-if(APPLE AND UNIX)
+if(APPLE AND BUILD_APP_BUNDLE)
   set(RESOURCEFUL_RESOURCEPATH "../Resources")
   set(RESOURCEFUL_PACKAGE_LOCATION "Resources")
 else()

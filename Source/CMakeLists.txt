@@ -42,14 +42,22 @@ set(RESOURCEFUL_SOURCES
   )
 set(RESOURCEFUL_RESOURCES startupScript)
 
-set_property(SOURCE ${RESOURCEFUL_RESOURCES}
-  PROPERTY
-    MACOSX_PACKAGE_LOCATION "${RESOURCEFUL_PACKAGE_LOCATION}"
-  )
-
 #-----------------------------------------------------------------------
 # Target
 #
-add_executable(Resourceful MACOSX_BUNDLE ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
+if(BUILD_APP_BUNDLE)
+  set_property(SOURCE ${RESOURCEFUL_RESOURCES}
+    PROPERTY
+      MACOSX_PACKAGE_LOCATION "${RESOURCEFUL_PACKAGE_LOCATION}"
+    )
+  add_executable(Resourceful MACOSX_BUNDLE ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
+else()
+  foreach(_res ${RESOURCEFUL_RESOURCES})
+    configure_file(${_res} ${PROJECT_BINARY_DIR}/BuildProducts/${CMAKE_INSTALL_RESOURCEDIR}/${_res} COPYONLY)
+  endforeach()
+  add_executable(Resourceful ${RESOURCEFUL_SOURCES} ${RESOURCEFUL_RESOURCES})
+endif()
+
 target_link_libraries(Resourceful ${Boost_LIBRARIES})
+
 
