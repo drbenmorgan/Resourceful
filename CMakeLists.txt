@@ -12,16 +12,10 @@
 # See the License for more information.
 #-----------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
-project(Resourceful)
+project(Resourceful VERSION 0.1.0)
 
 #----------------------------------------------------------------------
 # Define the project configuration
-#
-# - Versioning
-set(Resourceful_VERSION_MAJOR 0)
-set(Resourceful_VERSION_MINOR 1)
-set(Resourceful_VERSION_PATCH 0)
-
 # Force C++11 without checks
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 11)
