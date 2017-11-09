@@ -104,3 +104,9 @@ target_link_libraries(ResourcefulClient ResourcefulInterface)
 add_executable(ResourcefulClient-static Resourceful.cpp)
 target_link_libraries(ResourcefulClient-static ResourcefulInterface-static)
 
+
+install(TARGETS ResourcefulInterface ResourcefulClient
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  )
+
