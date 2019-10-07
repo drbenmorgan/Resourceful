@@ -1,0 +1,64 @@
+/** \file hsf_binreloc.h
+ *  \brief Query program/library location on filesystem
+ *
+ * BinReloc - a library for creating relocatable executables
+ * Written by: Hongli Lai <h.lai@chello.nl>
+ * Modifications by: Ben Morgan <Ben.Morgan@warwick.ac.uk>
+ *
+ * This program is free software. It comes without any warranty, to
+ * the extent permitted by applicable law. You can redistribute it
+ * and/or modify it under the terms of thr Boost Software License,
+ *
+ * http://www.boost.org/LICENSE_1_0.txt
+ *
+ */
+#ifndef __BINRELOC_H__
+#define __BINRELOC_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+/** These error codes can be returned by br_init(), br_init_lib() */
+typedef enum {
+  /** Cannot allocate memory. */
+  BR_INIT_ERROR_NOMEM,
+  /** Unable to open /proc/self/maps; see errno for details. */
+  BR_INIT_ERROR_OPEN_MAPS,
+  /** Unable to read from /proc/self/maps; see errno for details. */
+  BR_INIT_ERROR_READ_MAPS,
+  /** The file format of /proc/self/maps is invalid; kernel bug? */
+  BR_INIT_ERROR_INVALID_MAPS,
+  /** BinReloc is disabled (the ENABLE_BINRELOC macro is not defined). */
+  BR_INIT_ERROR_DISABLED
+} BrInitError;
+
+#ifndef BINRELOC_RUNNING_DOXYGEN
+/* Mangle symbol names to avoid symbol
+ * collisions with other ELF objects.
+ */
+#define br_init @MANGLE_BINRELOC@_br_init
+#define br_init_lib @MANGLE_BINRELOC@_br_init_lib
+#define br_find_exe @MANGLE_BINRELOC@_br_find_exe
+#define br_find_exe_dir @MANGLE_BINRELOC@_br_find_exe_dir
+#define br_dirname @MANGLE_BINRELOC@_br_dirname
+#endif
+
+/* Initialization */
+int br_init(BrInitError *error);
+int br_init_lib(BrInitError *error);
+
+/* Paths to binary this code was compiled into
+ * and directory containing it
+ */
+char *br_find_exe(const char *default_exe);
+char *br_find_exe_dir(const char *default_dir);
+
+/* Utility functions */
+char *br_dirname(const char *path);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* __BINRELOC_H__ */

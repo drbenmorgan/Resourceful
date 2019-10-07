@@ -1,0 +1,20 @@
+#ifndef CONFIG_HH
+#define CONFIG_HH
+
+namespace rsf {
+namespace build {
+
+std::string getLibDirToResourceDir() {
+  return "@PROJECT_LIBDIR_TO_RESOURCEDIR@";
+}
+
+std::string getLibDirToPluginDir() {
+  return "@PROJECT_LIBDIR_TO_PLUGINDIR@";
+}
+
+} // namespace build
+
+} // namespace rsf
+
+#endif // CONFIG_HH
+

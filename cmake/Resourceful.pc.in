@@ -1,0 +1,15 @@
+prefix=${pcfiledir}/@PROJECT_PCFILEDIR_TO_PREFIX@
+libdir=${prefix}@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: @PROJECT_NAME@
+Version: @PROJECT_VERSION@
+Description: "Description of @PROJECT_NAME@" 
+# Boost is a good example of a project that doesn't supply a pcfile
+# so we can't depend on it here. We should be able to write
+#
+# Requires.private: boost-filesystem == @Boost_VERSION_STRING@
+#
+# Could use Libs.private, but implies absolute paths!
+Libs: -L${libdir} -lResourceful
+Cflags: -I${includedir}
