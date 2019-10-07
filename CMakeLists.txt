@@ -11,15 +11,15 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the License for more information.
 #-----------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(Resourceful VERSION 0.1.0)
 
 #----------------------------------------------------------------------
 # Define the project configuration
-# Force C++11 without checks
+# Allow configuration of the CMAKE_CXX_STANDARD variable
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ Standard to compile against")
 
 
 # - Build as .app on Mac, standard tool on other platforms
