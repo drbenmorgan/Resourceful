@@ -1,8 +1,14 @@
 #include "Resourceful/Resourceful.h"
-#include "Resourceful/Filesystem.h"
 
 #include "Resourceful/RSFLibrary_binreloc.h"
 #include "Resourceful/Config_build.h"
+
+// Use Boost for Filesystem
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
+
+#include <fstream>
+#include <dlfcn.h>
 
 // Private implementation details
 namespace {
@@ -44,24 +50,92 @@ namespace rsf {
 std::string getLibraryDir() {
   initBinReloc();
   char* libDir = br_find_exe_dir("");
-  rsf::filesystem::path rawLibDir{libDir};
+  fs::path rawLibDir{libDir};
   free(libDir);
-  auto canonicalLibDir = rsf::filesystem::canonical(rawLibDir);
+  auto canonicalLibDir = fs::canonical(rawLibDir);
   return canonicalLibDir.string();
 }
 
 std::string getResourceRootDir() {
-  rsf::filesystem::path basePath{getLibraryDir()};
+  fs::path basePath{getLibraryDir()};
   basePath /= rsf::build::getLibDirToResourceDir();
-  auto absPath = rsf::filesystem::canonical(basePath);
+  auto absPath = fs::canonical(basePath);
   return absPath.string();
 }
 
 std::string getPluginRootDir() {
-  rsf::filesystem::path basePath{getLibraryDir()};
+  fs::path basePath{getLibraryDir()};
   basePath /= rsf::build::getLibDirToPluginDir();
-  auto absPath = rsf::filesystem::canonical(basePath);
+  auto absPath = fs::canonical(basePath);
   return absPath.string();
+}
+
+void catResource(const std::string& resource, std::ostream& os) {
+  auto resPath = fs::path{getResourceRootDir()} / resource;
+  if (!fs::exists(resPath)) {
+    std::cerr << "catResource : non-existant resource '" << resPath << "'" << std::endl;
+    return;
+  }
+  if (!fs::is_regular_file(resPath)) {
+    std::cerr << "catResource : resource '" << resPath << "; is not a regular file" << std::endl;
+    return;
+  }
+
+  std::string sLine;
+  std::ifstream resStream{resPath.string()};
+  if (!resStream) {
+    std::cerr << "catResource : failed to open stream on '" << resPath << "'" << std::endl;
+    return;
+  }
+  os << "-- Resource '" << resPath << "'" << std::endl;
+  while (std::getline(resStream,sLine)) {
+    os << sLine << std::endl;
+  }
+  os << "--" << std::endl;
+}
+
+void runPlugins(std::ostream& sink) {
+  using PluginFunction = void (*)(std::ostream&);
+  const char* dlErrorMsg{nullptr};
+
+  for(const std::string& plugin : {"cat", "dog", "parrot", "horse"}) {
+    auto pluginPath = fs::path{getPluginRootDir()} / (plugin + ".so");
+    
+    sink << "Trying plugin '" << plugin << "' (" << pluginPath << ")" << std::endl;
+
+    if(!fs::exists(pluginPath)) {
+      std::cerr << "runPlugins: No such plugin '" << pluginPath <<"'" << std::endl;
+      continue;
+    }
+
+    void* handle = dlopen(pluginPath.string().c_str(), RTLD_LAZY);
+    dlErrorMsg = dlerror();
+
+    if (handle == nullptr || dlErrorMsg != nullptr) {
+      std::cerr << "runPlugins : dlerror: " << dlErrorMsg << std::endl;
+      continue;
+    }
+
+    PluginFunction callable = (PluginFunction) dlsym(handle, "sayHello");
+    dlErrorMsg = dlerror();
+
+    if (callable == nullptr || dlErrorMsg != nullptr) {
+      std::cerr << "runPlugins: dlerror: " << dlErrorMsg << std::endl;
+      dlclose(handle);
+      continue;
+    }
+
+    sink << plugin << " says ";
+    callable(sink);
+    sink << std::endl;
+
+    int closed = dlclose(handle);
+    dlErrorMsg = dlerror();
+
+    if (closed < 0 || dlErrorMsg != nullptr) {
+      std::cerr << "runPlugins: dlerror: " << dlErrorMsg << std::endl;
+    }
+  }
 }
 
 } // namespace rsf

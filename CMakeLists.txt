@@ -44,8 +44,9 @@ set(CMAKE_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_FULL_LIBDIR}/cmake")
 set(CMAKE_INSTALL_PKGCONFIGDIR "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 set(CMAKE_INSTALL_FULL_PKGCONFIGDIR "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
 
-# - Calculate relative paths between known absolute install location of library
+# - Calculate relative paths between known absolute install location of binaries/library
 #   and resource/plugin dirs
+file(RELATIVE_PATH PROJECT_BINDIR_TO_LIBDIR "${CMAKE_INSTALL_FULL_BINDIR}" "${CMAKE_INSTALL_FULL_LIBDIR}")
 file(RELATIVE_PATH PROJECT_LIBDIR_TO_RESOURCEDIR "${CMAKE_INSTALL_FULL_LIBDIR}" "${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PROJECT_NAME}")
 set(PROJECT_LIBDIR_TO_PLUGINDIR "rsf")
 
@@ -93,7 +94,6 @@ set(BASE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/BuildProducts")
 #  where ``<CONFIG>`` is repeated for each build configuration listed in
 #  :cmake:variable:`CMAKE_CONFIGURATION_TYPES <cmake:variable:CMAKE_CONFIGURATION_TYPES>`, e.g. Release, Debug, RelWithDebInfo etc.
 
-
 if(NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/${CMAKE_INSTALL_BINDIR}")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/${CMAKE_INSTALL_LIBDIR}")
@@ -106,6 +106,7 @@ else()
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/$<CONFIG>/${CMAKE_INSTALL_BINDIR}")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/$<CONFIG>/${CMAKE_INSTALL_LIBDIR}")
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/$<CONFIG>/${CMAKE_INSTALL_LIBDIR}")
+  
   # CMake awkwardness - configure_file doesn't support genexes
   configure_file(resources/Resourceful.json "${BASE_OUTPUT_DIRECTORY}/${CMAKE_INSTALL_DATAROOTDIR}/Resourceful/Resourceful.json" COPYONLY)
   file(GENERATE
@@ -125,6 +126,11 @@ include(CTest)
 #
 add_subdirectory(Resourceful)
 add_subdirectory(programs)
+
+#----------------------------------------------------------------------
+# Install resources
+#
+install(DIRECTORY resources/ DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/Resourceful")
 
 #-----------------------------------------------------------------------
 # Configure/install CMake/pkgconfig helpers
